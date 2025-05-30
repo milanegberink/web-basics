@@ -1,4 +1,5 @@
 import { get, create, list, del } from "./base/index.js";
+import { tryCatch } from "../utils/try-catch.js";
 
 class Product {
   id;
@@ -23,13 +24,20 @@ export class ProductForCreate {
 
 export class ProductBmc {
   static table = "products";
+  static allowedQueryParams = ["id", "name", "price"];
+
   static get(mm, id) {
     const data = get(mm, this.table, id);
     return new Product(data);
   }
 
-  static list(mm) {
-    const data = list(mm, this.table);
+  static list(mm, params) {
+    const [data, error] = tryCatch(() =>
+      list(mm, this.table, params, this.allowedQueryParams),
+    );
+
+    if (error) throw error;
+
     const products = data.map((obj) => new Product(obj));
     return products;
   }

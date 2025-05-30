@@ -16,20 +16,27 @@ export function del(req, res) {
   res.status(200).send;
 }
 
-export async function getById(req, res) {
+export function getById(req, res) {
   const { id } = req.params;
-  const [product, error] = await tryCatch(() =>
+  const [product, error] = tryCatch(() =>
     ProductBmc.get(req.app.locals.state.mm, id),
   );
 
   if (error) {
-    return res.status(404).json({ error: "Product not found" });
+    res.status(404).json({ error: "Product not found" });
   }
 
   res.json(product).status(200);
 }
 
 export function listAll(req, res) {
-  const products = ProductBmc.list(req.app.locals.state.mm);
+  const [products, error] = tryCatch(() =>
+    ProductBmc.list(req.app.locals.state.mm, req.query),
+  );
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
   res.json(products).status(200);
 }
