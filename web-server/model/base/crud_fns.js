@@ -9,31 +9,40 @@ const operatorMap = {
 export function list(mm, table, params, allowedQueryParams) {
   let query = `SELECT * FROM ${table}`;
 
+  const paramEntries = Object.entries(params);
+
+  if (paramEntries.length === 0) {
+    return mm.db.prepare(query).all();
+  }
+
   const conditions = [];
+  const queryValues = [];
 
-  if (Object.keys(params).length !== 0) {
-    const values = Object.values(params);
+  for (const [key, value] of paramEntries) {
+    const parts = key.split("_");
+    let columnName;
+    let sqlOperator;
 
-    query += " WHERE ";
-    for (const key of Object.keys(params)) {
-      if (!allowedQueryParams.includes(key)) {
-        throw Error("Invalid query parameter");
-      }
-
-      const parts = key.split("_");
-
-      if (parts[0] in operatorMap) {
-        const operator = operatorMap[parts[0]];
-        conditions.push(`${parts[1]} ${operator} ?`);
-      } else {
-        conditions.push(`${key} LIKE ?`);
-      }
+    if (parts.length > 1 && operatorMap.hasOwnProperty(parts[0])) {
+      sqlOperator = operatorMap[parts[0]];
+      columnName = parts.slice(1).join("_");
+    } else {
+      columnName = key;
+      sqlOperator = "LIKE";
     }
 
-    query += conditions.join(" AND ");
-    return mm.db.prepare(query).all(...values);
+    if (!allowedQueryParams.includes(columnName)) {
+      throw new Error(
+        `Invalid or disallowed query parameter: Column '${columnName}' (derived from parameter '${key}') is not allowed.`,
+      );
+    }
+
+    conditions.push(`${columnName} ${sqlOperator} ?`);
+    queryValues.push(value);
   }
-  return mm.db.prepare(`SELECT * FROM ${table}`).all();
+
+  query += ` WHERE ${conditions.join(" AND ")}`;
+  return mm.db.prepare(query).all(...queryValues);
 }
 
 export function create(mm, table, obj) {
