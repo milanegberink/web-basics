@@ -4,41 +4,94 @@ export const get = (mm, table, id) =>
 const operatorMap = {
   max: "<=",
   min: ">=",
+  like: "LIKE",
 };
 
 export function list(mm, table, params, allowedQueryParams) {
   let query = `SELECT * FROM ${table}`;
 
-  const paramEntries = Object.entries(params);
+  const entries = Object.entries(params);
 
-  if (paramEntries.length === 0) {
+  if (entries.length === 0) {
     return mm.db.prepare(query).all();
   }
 
   const conditions = [];
   const queryValues = [];
 
-  for (const [key, value] of paramEntries) {
-    const parts = key.split("_");
-    let columnName;
-    let sqlOperator;
-
-    if (parts.length > 1 && operatorMap.hasOwnProperty(parts[0])) {
-      sqlOperator = operatorMap[parts[0]];
-      columnName = parts.slice(1).join("_");
-    } else {
-      columnName = key;
-      sqlOperator = "LIKE";
+  for (const [key, value] of entries) {
+    if (value === undefined || value === null || String(value).trim() === "") {
+      continue;
     }
 
-    if (!allowedQueryParams.includes(columnName)) {
+    const parts = key.split("_");
+    let column;
+    let sqlOperator;
+
+    if (
+      parts.length > 1 &&
+      typeof operatorMap === "object" &&
+      operatorMap !== null &&
+      operatorMap.hasOwnProperty(parts[0].toLowerCase())
+    ) {
+      sqlOperator = operatorMap[parts[0].toLowerCase()];
+      column = parts.slice(1).join("_");
+    } else {
+      column = key;
+    }
+
+    if (!allowedQueryParams.includes(column)) {
       throw new Error(
-        `Invalid or disallowed query parameter: Column '${columnName}' (derived from parameter '${key}') is not allowed.`,
+        `Invalid query parameter: Column '${column}' (from parameter '${key}') is not allowed.`,
       );
     }
 
-    conditions.push(`${columnName} ${sqlOperator} ?`);
-    queryValues.push(value);
+    if (
+      (sqlOperator === "IN" || sqlOperator === "NOT IN") &&
+      typeof value === "string"
+    ) {
+      const inValues = value
+        .split(",")
+        .map((v) => v.trim())
+        .filter((v) => v !== "");
+      if (inValues.length > 0) {
+        conditions.push(
+          `${column} ${sqlOperator} (${inValues.map(() => "?").join(",")})`,
+        );
+        queryValues.push(...inValues);
+      } else {
+        if (sqlOperator === "IN") {
+          conditions.push("1=0");
+        } else {
+          conditions.push("1=1");
+        }
+      }
+    } else if (
+      !sqlOperator &&
+      typeof value === "string" &&
+      value.includes(",")
+    ) {
+      const inValues = value
+        .split(",")
+        .map((v) => v.trim())
+        .filter((v) => v !== "");
+      if (inValues.length > 0) {
+        conditions.push(`${column} IN (${inValues.map(() => "?").join(",")})`);
+        queryValues.push(...inValues);
+      } else {
+        conditions.push("1=0");
+      }
+    } else {
+      if (!sqlOperator) {
+        sqlOperator = "=";
+      }
+      conditions.push(`${column} ${sqlOperator} ?`);
+      queryValues.push(value);
+    }
+  }
+
+  if (conditions.length === 0) {
+    return mm.db.prepare(query).all();
   }
 
   query += ` WHERE ${conditions.join(" AND ")}`;
@@ -55,9 +108,8 @@ export function create(mm, table, obj) {
 
   const query = `INSERT INTO ${table} (${fieldList}) VALUES (${placeholders})`;
 
-  console.log(query);
-
-  mm.db.prepare(query).run(...values);
+  const result = mm.db.prepare(query).run(...values);
+  return result.lastInsertRowid;
 }
 
 export const del = (mm, table, id) =>
@@ -65,4 +117,9 @@ export const del = (mm, table, id) =>
 
 export function update(mm, table, id) {
   const query = `UPDATE ${table} `;
+}
+
+export function withTransaction(mm, cb) {
+  const txn = mm.db.transaction(cb);
+  return txn();
 }

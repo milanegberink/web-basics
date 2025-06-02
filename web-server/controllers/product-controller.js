@@ -2,8 +2,7 @@ import { ProductBmc, ProductForCreate } from "../model/index.js";
 import { tryCatch } from "../utils/try-catch.js";
 
 export function create(req, res) {
-  const { name, price } = req.body;
-  const product = new ProductForCreate(name, price);
+  const product = new ProductForCreate(req.body);
   ProductBmc.create(req.app.locals.state.mm, product);
 
   res.status(201).send();
