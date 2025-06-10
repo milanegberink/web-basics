@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Order Fulfillment System</title>
+        <title>Products - Order Fulfillment System</title>
         <link rel="stylesheet" href="../styles/app.css" />
+        <link rel="stylesheet" href="../styles/products.css" />
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
             rel="stylesheet"
@@ -18,7 +19,7 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a class="nav-link" href="products.html">
+                    <a class="nav-link active" href="products.html">
                         <span class="material-symbols-outlined nav-icon">
                             shopping_cart
                         </span>
@@ -44,11 +45,78 @@
                 </div>
             </header>
             <div class="content-area">
-                <p>
-                    Welcome to the Order Fulfillment System. Select a section
-                    from the sidebar to begin.
-                </p>
+                <div class="products-header">
+                    <h3>Product Inventory</h3>
+                    <button class="add-product-btn">
+                        <span class="material-symbols-outlined">add</span>
+                        Add Product
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Product Code</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body">
+                            <!-- Products will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
+        <script src="../js/products.js"></script>
+        <script>
+            function formatPrice(price) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(price);
+            }
+
+            function renderProducts() {
+                const tableBody = document.getElementById('products-table-body');
+                tableBody.innerHTML = products.map(product => `
+                    <tr>
+                        <td>${product.id}</td>
+                        <td>
+                            <img src="${product.image}" alt="${product.name}" class="product-image" 
+                                onerror="this.src='https://via.placeholder.com/50'">
+                        </td>
+                        <td>
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-description">${product.description}</div>
+                        </td>
+                        <td>${product.product_code}</td>
+                        <td>${formatPrice(product.price)}</td>
+                        <td>
+                            <span class="stock-badge ${product.stock_quantity > 50 ? 'in-stock' : 'low-stock'}">
+                                ${product.stock_quantity}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Edit">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                                <button class="action-btn delete" title="Delete">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Render products when the page loads
+            document.addEventListener('DOMContentLoaded', renderProducts);
+        </script>
     </body>
 </html>
