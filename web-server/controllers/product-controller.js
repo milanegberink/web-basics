@@ -12,7 +12,7 @@ export function del(req, res) {
   const { id } = req.params;
   ProductBmc.delete(req.app.locals.state.mm, id);
 
-  res.status(200).send;
+  res.status(200).send();
 }
 
 export function getById(req, res) {
