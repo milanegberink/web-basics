@@ -4,8 +4,8 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Products - Order Fulfillment System</title>
-        <link rel="stylesheet" href="../styles/app.css" />
-        <link rel="stylesheet" href="../styles/products.css" />
+        <link rel="stylesheet" href="./styles/app.css" />
+        <link rel="stylesheet" href="./styles/products.css" />
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
             rel="stylesheet"
@@ -47,10 +47,80 @@
             <div class="content-area">
                 <div class="products-header">
                     <h3>Product Inventory</h3>
-                    <button class="add-product-btn">
-                        <span class="material-symbols-outlined">add</span>
-                        Add Product
-                    </button>
+                    <div class="header-actions">
+                        <div class="search-filters">
+                            <div class="search-bar">
+                                <input 
+                                    type="text" 
+                                    id="searchInput" 
+                                    placeholder="Search by name or description..." 
+                                    class="search-input"
+                                />
+                            </div>
+                            <div class="filter-menu">
+                                <button class="filter-btn" id="filterBtn">
+                                    <span class="material-symbols-outlined">filter_list</span>
+                                    Filters
+                                </button>
+                                <div class="filter-dropdown" id="filterDropdown">
+                                    <div class="filter-section">
+                                        <h4>Price Range</h4>
+                                        <div class="filter-inputs">
+                                            <input 
+                                                type="number" 
+                                                id="minPrice" 
+                                                placeholder="Min price" 
+                                                class="filter-input"
+                                                min="0"
+                                                step="0.01"
+                                                data-param="min_price"
+                                            />
+                                            <input 
+                                                type="number" 
+                                                id="maxPrice" 
+                                                placeholder="Max price" 
+                                                class="filter-input"
+                                                min="0"
+                                                step="0.01"
+                                                data-param="max_price"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="filter-section">
+                                        <h4>Stock Range</h4>
+                                        <div class="filter-inputs">
+                                            <input 
+                                                type="number" 
+                                                id="minStock" 
+                                                placeholder="Min stock" 
+                                                class="filter-input"
+                                                min="0"
+                                                step="1"
+                                                data-param="min_stock_quantity"
+                                            />
+                                            <input 
+                                                type="number" 
+                                                id="maxStock" 
+                                                placeholder="Max stock" 
+                                                class="filter-input"
+                                                min="0"
+                                                step="1"
+                                                data-param="max_stock_quantity"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="filter-actions">
+                                        <button class="clear-filters-btn" id="clearFilters">Clear All</button>
+                                        <button class="apply-filters-btn" id="applyFilters">Apply Filters</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="add-product-btn">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Product
+                        </button>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table class="products-table">
@@ -81,34 +151,69 @@
                     <button class="close-modal">&times;</button>
                 </div>
                 <form id="productForm" class="product-form">
-                    <input type="hidden" id="productId" name="id">
+                    <input type="hidden" id="productId" name="id" />
                     <div class="form-group">
                         <label for="productName">Product Name</label>
-                        <input type="text" id="productName" name="name" required>
+                        <input
+                            type="text"
+                            id="productName"
+                            name="name"
+                            required
+                        />
                     </div>
                     <div class="form-group">
                         <label for="productPrice">Price</label>
-                        <input type="number" id="productPrice" name="price" step="0.01" min="0" required>
+                        <input
+                            type="number"
+                            id="productPrice"
+                            name="price"
+                            step="0.01"
+                            min="0"
+                            required
+                        />
                     </div>
                     <div class="form-group">
                         <label for="productImage">Image URL</label>
-                        <input type="url" id="productImage" name="image" required>
+                        <input
+                            type="url"
+                            id="productImage"
+                            name="image"
+                            required
+                        />
                     </div>
                     <div class="form-group">
                         <label for="productCode">Product Code</label>
-                        <input type="text" id="productCode" name="product_code" required>
+                        <input
+                            type="text"
+                            id="productCode"
+                            name="product_code"
+                            required
+                        />
                     </div>
                     <div class="form-group">
                         <label for="productDescription">Description</label>
-                        <textarea id="productDescription" name="description" rows="3" required></textarea>
+                        <textarea
+                            id="productDescription"
+                            name="description"
+                            rows="3"
+                            required
+                        ></textarea>
                     </div>
                     <div class="form-group">
                         <label for="productStock">Stock Quantity</label>
-                        <input type="number" id="productStock" name="stock_quantity" min="0" required>
+                        <input
+                            type="number"
+                            id="productStock"
+                            name="stock_quantity"
+                            min="0"
+                            required
+                        />
                     </div>
                     <div class="form-actions">
                         <button type="button" class="cancel-btn">Cancel</button>
-                        <button type="submit" class="submit-btn">Save Product</button>
+                        <button type="submit" class="submit-btn">
+                            Save Product
+                        </button>
                     </div>
                 </form>
             </div>
@@ -205,7 +310,7 @@
             }
 
             .submit-btn {
-                background-color: #4CAF50;
+                background-color: #4caf50;
                 border: none;
                 color: white;
             }
@@ -217,51 +322,204 @@
             .submit-btn:hover {
                 background-color: #45a049;
             }
+
+            .header-actions {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .search-filters {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .search-bar {
+                position: relative;
+            }
+
+            .search-input {
+                padding: 0.5rem 1rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                width: 200px;
+            }
+
+            .filter-menu {
+                position: relative;
+            }
+
+            .filter-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                color: #333;
+            }
+
+            .filter-btn:hover {
+                background: #f8f9fa;
+            }
+
+            .filter-dropdown {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                margin-top: 0.5rem;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                padding: 1rem;
+                min-width: 250px;
+                z-index: 1000;
+            }
+
+            .filter-dropdown.show {
+                display: block;
+            }
+
+            .filter-section {
+                margin-bottom: 1rem;
+            }
+
+            .filter-section h4 {
+                margin: 0 0 0.5rem 0;
+                font-size: 0.9rem;
+                color: #666;
+            }
+
+            .filter-inputs {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .filter-input {
+                padding: 0.5rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                width: 100px;
+            }
+
+            .filter-input:focus {
+                outline: none;
+                border-color: #2563eb;
+                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+            }
+
+            .filter-actions {
+                display: flex;
+                justify-content: space-between;
+                gap: 0.5rem;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eee;
+            }
+
+            .clear-filters-btn,
+            .apply-filters-btn {
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                cursor: pointer;
+            }
+
+            .clear-filters-btn {
+                background: none;
+                border: 1px solid #ddd;
+                color: #666;
+            }
+
+            .apply-filters-btn {
+                background: #2563eb;
+                border: none;
+                color: white;
+            }
+
+            .clear-filters-btn:hover {
+                background: #f8f9fa;
+            }
+
+            .apply-filters-btn:hover {
+                background: #1d4ed8;
+            }
         </style>
 
         <script src="../js/products.js"></script>
         <script>
             function formatPrice(price) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
+                return new Intl.NumberFormat("nl-NL", {
+                    style: "currency",
+                    currency: "EUR",
                 }).format(price);
             }
 
             async function deleteProduct(productId) {
-                if (!confirm('Are you sure you want to delete this product?')) {
+                if (!confirm("Are you sure you want to delete this product?")) {
                     return;
                 }
 
                 try {
-                    const response = await fetch(`http://localhost:3000/products/${productId}`, {
-                        method: 'DELETE',
-                    });
+                    const response = await fetch(
+                        `http://localhost:3000/products/${productId}`,
+                        {
+                            method: "DELETE",
+                        },
+                    );
 
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error(
+                            `HTTP error! status: ${response.status}`,
+                        );
                     }
 
                     // Refresh the products list after successful deletion
                     const products = await fetchProducts();
                     await renderProducts(products);
                 } catch (error) {
-                    console.error('Error deleting product:', error);
-                    alert('Failed to delete product. Please try again later.');
+                    console.error("Error deleting product:", error);
+                    alert("Failed to delete product. Please try again later.");
                 }
             }
 
             async function fetchProducts() {
                 try {
-                    const response = await fetch('http://localhost:3000/products');
+                    // Build query parameters
+                    const searchQuery = document.getElementById('searchInput').value;
+                    const params = new URLSearchParams();
+                    
+                    // Add search query if present
+                    if (searchQuery) {
+                        params.append('name', searchQuery);
+                    }
+
+                    // Add all filter values
+                    document.querySelectorAll('.filter-input').forEach(input => {
+                        if (input.value) {
+                            params.append(input.dataset.param, input.value);
+                        }
+                    });
+
+                    const url = `http://localhost:3000/products${params.toString() ? `?${params.toString()}` : ''}`;
+                    
+                    const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const products = await response.json();
                     return products;
                 } catch (error) {
-                    console.error('Error fetching products:', error);
-                    const tableBody = document.getElementById('products-table-body');
+                    console.error("Error fetching products:", error);
+                    const tableBody = document.getElementById("products-table-body");
                     tableBody.innerHTML = `
                         <tr>
                             <td colspan="7" class="error-message">
@@ -273,25 +531,27 @@
                 }
             }
 
-            let currentMode = 'add'; // 'add' or 'edit'
+            let currentMode = "add"; // 'add' or 'edit'
 
             async function saveProduct(productData) {
-                const isEdit = currentMode === 'edit';
-                const url = isEdit 
+                const isEdit = currentMode === "edit";
+                const url = isEdit
                     ? `http://localhost:3000/products/${productData.id}`
-                    : 'http://localhost:3000/products';
-                
+                    : "http://localhost:3000/products";
+
                 try {
                     const response = await fetch(url, {
-                        method: isEdit ? 'PUT' : 'POST',
+                        method: isEdit ? "PUT" : "POST",
                         headers: {
-                            'Content-Type': 'application/json',
+                            "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(productData)
+                        body: JSON.stringify(productData),
                     });
 
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error(
+                            `HTTP error! status: ${response.status}`,
+                        );
                     }
 
                     // Close modal and refresh products
@@ -299,44 +559,58 @@
                     const products = await fetchProducts();
                     await renderProducts(products);
                 } catch (error) {
-                    console.error(`Error ${isEdit ? 'updating' : 'adding'} product:`, error);
-                    alert(`Failed to ${isEdit ? 'update' : 'add'} product. Please try again later.`);
+                    console.error(
+                        `Error ${isEdit ? "updating" : "adding"} product:`,
+                        error,
+                    );
+                    alert(
+                        `Failed to ${isEdit ? "update" : "add"} product. Please try again later.`,
+                    );
                 }
             }
 
-            function openModal(mode = 'add', product = null) {
+            function openModal(mode = "add", product = null) {
                 currentMode = mode;
-                const modal = document.getElementById('productModal');
-                const form = document.getElementById('productForm');
-                const title = document.getElementById('modalTitle');
-                const submitBtn = form.querySelector('.submit-btn');
+                const modal = document.getElementById("productModal");
+                const form = document.getElementById("productForm");
+                const title = document.getElementById("modalTitle");
+                const submitBtn = form.querySelector(".submit-btn");
 
                 // Reset form and set title
                 form.reset();
-                title.textContent = mode === 'add' ? 'Add New Product' : 'Edit Product';
-                submitBtn.textContent = mode === 'add' ? 'Add Product' : 'Save Changes';
+                title.textContent =
+                    mode === "add" ? "Add New Product" : "Edit Product";
+                submitBtn.textContent =
+                    mode === "add" ? "Add Product" : "Save Changes";
 
                 // If editing, populate form with product data
-                if (mode === 'edit' && product) {
-                    document.getElementById('productId').value = product.id;
-                    document.getElementById('productName').value = product.name;
-                    document.getElementById('productPrice').value = product.price;
-                    document.getElementById('productImage').value = product.image;
-                    document.getElementById('productCode').value = product.product_code;
-                    document.getElementById('productDescription').value = product.description;
-                    document.getElementById('productStock').value = product.stock_quantity;
+                if (mode === "edit" && product) {
+                    document.getElementById("productId").value = product.id;
+                    document.getElementById("productName").value = product.name;
+                    document.getElementById("productPrice").value =
+                        product.price;
+                    document.getElementById("productImage").value =
+                        product.image;
+                    document.getElementById("productCode").value =
+                        product.product_code;
+                    document.getElementById("productDescription").value =
+                        product.description;
+                    document.getElementById("productStock").value =
+                        product.stock_quantity;
                 }
 
-                modal.style.display = 'block';
+                modal.style.display = "block";
             }
 
             function closeModal() {
-                document.getElementById('productModal').style.display = 'none';
-                currentMode = 'add'; // Reset mode
+                document.getElementById("productModal").style.display = "none";
+                currentMode = "add"; // Reset mode
             }
 
             async function renderProducts() {
-                const tableBody = document.getElementById('products-table-body');
+                const tableBody = document.getElementById(
+                    "products-table-body",
+                );
                 // Show loading state
                 tableBody.innerHTML = `
                     <tr>
@@ -347,7 +621,7 @@
                 `;
 
                 const products = await fetchProducts();
-                
+
                 if (products.length === 0) {
                     tableBody.innerHTML = `
                         <tr>
@@ -359,12 +633,13 @@
                     return;
                 }
 
-                tableBody.innerHTML = products.map(product => `
+                tableBody.innerHTML = products
+                    .map(
+                        (product) => `
                     <tr>
                         <td>${product.id}</td>
                         <td>
-                            <img src="${product.image}" alt="${product.name}" class="product-image" 
-                                onerror="this.src='https://via.placeholder.com/50'">
+                            <img src="${product.image}" alt="${product.name}" class="product-image">
                         </td>
                         <td>
                             <div class="product-name">${product.name}</div>
@@ -373,7 +648,7 @@
                         <td>${product.product_code}</td>
                         <td>${formatPrice(product.price)}</td>
                         <td>
-                            <span class="stock-badge ${product.stock_quantity > 50 ? 'in-stock' : 'low-stock'}">
+                            <span class="stock-badge ${product.stock_quantity > 50 ? "in-stock" : "low-stock"}">
                                 ${product.stock_quantity}
                             </span>
                         </td>
@@ -388,51 +663,116 @@
                             </div>
                         </td>
                     </tr>
-                `).join('');
+                `,
+                    )
+                    .join("");
             }
 
-            // Add event listeners when the page loads
-            document.addEventListener('DOMContentLoaded', () => {
+            // Add debounce function to prevent too many API calls
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            function clearFilters() {
+                document.getElementById('searchInput').value = '';
+                document.querySelectorAll('.filter-input').forEach(input => {
+                    input.value = '';
+                });
+                fetchAndRenderProducts();
+            }
+
+            function toggleFilterDropdown() {
+                const dropdown = document.getElementById('filterDropdown');
+                dropdown.classList.toggle('show');
+            }
+
+            // Close dropdown when clicking outside
+            function handleClickOutside(event) {
+                const dropdown = document.getElementById('filterDropdown');
+                const filterBtn = document.getElementById('filterBtn');
+                if (!dropdown.contains(event.target) && !filterBtn.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                }
+            }
+
+            // Initialize the page
+            document.addEventListener("DOMContentLoaded", () => {
                 // Initialize products
                 renderProducts();
 
                 // Add Product button click handler
-                document.querySelector('.add-product-btn').addEventListener('click', () => openModal('add'));
+                document
+                    .querySelector(".add-product-btn")
+                    .addEventListener("click", () => openModal("add"));
 
                 // Close modal when clicking the close button or cancel button
-                document.querySelector('.close-modal').addEventListener('click', closeModal);
-                document.querySelector('.cancel-btn').addEventListener('click', closeModal);
+                document
+                    .querySelector(".close-modal")
+                    .addEventListener("click", closeModal);
+                document
+                    .querySelector(".cancel-btn")
+                    .addEventListener("click", closeModal);
 
                 // Close modal when clicking outside
-                window.addEventListener('click', (event) => {
-                    const modal = document.getElementById('productModal');
+                window.addEventListener("click", (event) => {
+                    const modal = document.getElementById("productModal");
                     if (event.target === modal) {
                         closeModal();
                     }
                 });
 
                 // Handle form submission
-                document.getElementById('productForm').addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    
-                    const formData = new FormData(event.target);
-                    const productData = {
-                        name: formData.get('name'),
-                        price: parseFloat(formData.get('price')),
-                        image: formData.get('image'),
-                        product_code: formData.get('product_code'),
-                        description: formData.get('description'),
-                        stock_quantity: parseInt(formData.get('stock_quantity'))
-                    };
+                document
+                    .getElementById("productForm")
+                    .addEventListener("submit", async (event) => {
+                        event.preventDefault();
 
-                    // Add ID if in edit mode
-                    if (currentMode === 'edit') {
-                        productData.id = parseInt(formData.get('id'));
-                    }
+                        const formData = new FormData(event.target);
+                        const productData = {
+                            name: formData.get("name"),
+                            price: parseFloat(formData.get("price")),
+                            image: formData.get("image"),
+                            product_code: formData.get("product_code"),
+                            description: formData.get("description"),
+                            stock_quantity: parseInt(
+                                formData.get("stock_quantity"),
+                            ),
+                        };
 
-                    await saveProduct(productData);
+                        // Add ID if in edit mode
+                        if (currentMode === "edit") {
+                            productData.id = parseInt(formData.get("id"));
+                        }
+
+                        await saveProduct(productData);
+                    });
+
+                // Add event listeners for filters
+                document.getElementById('filterBtn').addEventListener('click', toggleFilterDropdown);
+                document.getElementById('clearFilters').addEventListener('click', clearFilters);
+                document.getElementById('applyFilters').addEventListener('click', () => {
+                    document.getElementById('filterDropdown').classList.remove('show');
+                    fetchAndRenderProducts();
                 });
+                document.addEventListener('click', handleClickOutside);
+
+                // Debounced search
+                const debouncedFetch = debounce(fetchAndRenderProducts, 300);
+                document.getElementById('searchInput').addEventListener('input', debouncedFetch);
             });
+
+            async function fetchAndRenderProducts() {
+                const products = await fetchProducts();
+                await renderProducts(products);
+            }
         </script>
     </body>
 </html>

@@ -11,9 +11,11 @@ app.locals.state = {
   mm: new ModelManager(),
 };
 
-app.use(cors({
-  origin: "http://127.0.0.1:8080",
-}));
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 
 app.use("/products", productsRouter);
 

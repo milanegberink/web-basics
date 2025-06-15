@@ -4,8 +4,8 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Orders - Order Fulfillment System</title>
-        <link rel="stylesheet" href="../styles/app.css" />
-        <link rel="stylesheet" href="../styles/orders.css" />
+        <link rel="stylesheet" href="./styles/app.css" />
+        <link rel="stylesheet" href="./styles/orders.css" />
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
             rel="stylesheet"
@@ -47,7 +47,11 @@
             <div class="content-area">
                 <div class="orders-header">
                     <h3>Order Management</h3>
-                    <div class="order-filters">
+                    <div class="header-actions">
+                        <a href="new-order.html" class="create-order-btn">
+                            <span class="material-symbols-outlined">add</span>
+                            Create New Order
+                        </a>
                         <select id="status-filter" class="status-filter">
                             <option value="all">All Statuses</option>
                             <option value="pending">Pending</option>
@@ -62,7 +66,7 @@
                     <table class="orders-table">
                         <thead>
                             <tr>
-                                <th>Order Number</th>
+                                <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Contact</th>
                                 <th>Shipping Address</th>
@@ -78,6 +82,35 @@
                 </div>
             </div>
         </main>
+
+        <style>
+            .header-actions {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .create-order-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background-color: #2563eb;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                font-weight: 500;
+                transition: background-color 0.2s;
+            }
+
+            .create-order-btn:hover {
+                background-color: #1d4ed8;
+            }
+
+            .create-order-btn .material-symbols-outlined {
+                font-size: 1.2rem;
+            }
+        </style>
 
         <script>
             function formatPrice(price) {
@@ -165,7 +198,7 @@
 
                 tableBody.innerHTML = filteredOrders.map(order => `
                     <tr>
-                        <td>${order.order_number}</td>
+                        <td>${order.id}</td>
                         <td>
                             <div class="customer-name">${order.customer_name}</div>
                         </td>

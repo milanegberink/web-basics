@@ -15,6 +15,20 @@ export function del(req, res) {
   res.status(200).send();
 }
 
+export function update(req, res) {
+  const { id } = req.params;
+  const fields = req.body;
+
+  const [, error] = tryCatch(() =>
+    ProductBmc.update(req.app.locals.state.mm, id, fields),
+  );
+
+  if (error) {
+    res.status(404).json({ error: "Product not found" });
+  }
+  res.status(200).send();
+}
+
 export function getById(req, res) {
   const { id } = req.params;
   const [product, error] = tryCatch(() =>

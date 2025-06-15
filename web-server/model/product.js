@@ -1,4 +1,4 @@
-import { get, create, list, del } from "./base/index.js";
+import { get, create, list, del, update } from "./base/index.js";
 import { tryCatch } from "../utils/try-catch.js";
 
 /*
@@ -81,6 +81,10 @@ export class ProductBmc {
     "stock_quantity",
     "product_code",
   ];
+
+  static update(mm, id, fields) {
+    update(mm, this.table, id, fields, this.allowedQueryParams);
+  }
 
   static get(mm, id) {
     const data = get(mm, this.table, id);

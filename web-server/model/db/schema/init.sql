@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_number VARCHAR(50) UNIQUE NOT NULL,
     customer_name TEXT NOT NULL,
     customer_email TEXT,
     customer_phone TEXT,
@@ -31,8 +30,6 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 CREATE INDEX IF NOT EXISTS idx_products_code ON products (product_code);
-
-CREATE INDEX IF NOT EXISTS idx_orders_number ON orders (order_number);
 
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders (order_status);
 

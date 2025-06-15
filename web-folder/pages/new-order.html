@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Orders - Order Fulfillment System</title>
+        <link rel="stylesheet" href="./styles/app.css" />
+        <link rel="stylesheet" href="./styles/orders.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet"
+        />
+    </head>
+
+    <body>
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Fulfillment</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="products.html">
+                        <span class="material-symbols-outlined nav-icon">
+                            shopping_cart
+                        </span>
+                        Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="orders.html">
+                        <span class="material-symbols-outlined nav-icon">
+                            shopping_bag
+                        </span>
+                        Orders
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h2>Orders</h2>
+                <div class="user-info">
+                    <span class="user-name">Admin User</span>
+                </div>
+            </header>
+            <div class="content-area">
+                <div class="orders-header">
+                    <h3>Create New Order</h3>
+                </div>
+
+                <form id="orderForm" class="order-form">
+                    <div class="form-section">
+                        <h4>Customer Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="customerName">Customer Name</label>
+                                <input
+                                    type="text"
+                                    id="customerName"
+                                    name="customer_name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail">Email</label>
+                                <input
+                                    type="email"
+                                    id="customerEmail"
+                                    name="customer_email"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Phone</label>
+                                <input
+                                    type="tel"
+                                    id="customerPhone"
+                                    name="customer_phone"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Shipping Address</h4>
+                        <div class="form-group">
+                            <label for="shippingAddress">Full Shipping Address</label>
+                            <textarea
+                                id="shippingAddress"
+                                name="shipping_address"
+                                rows="3"
+                                placeholder="Enter complete shipping address including street, city, state, and ZIP code"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Order Items</h4>
+                        <div id="orderItems" class="order-items">
+                            <div class="order-item">
+                                <div class="form-group">
+                                    <label for="productSelect">Product</label>
+                                    <select
+                                        id="productSelect"
+                                        name="products[]"
+                                        class="product-select"
+                                        required
+                                    >
+                                        <option value="">Select a product</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input
+                                        type="number"
+                                        id="quantity"
+                                        name="quantities[]"
+                                        min="1"
+                                        value="1"
+                                        required
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    class="remove-item-btn"
+                                    style="display: none"
+                                >
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" id="addItemBtn" class="add-item-btn">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Another Item
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Order Summary</h4>
+                        <div id="orderSummary" class="order-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span id="shipping">$0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn">Cancel</button>
+                        <button type="submit" class="submit-btn">
+                            Create Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <style>
+            .order-form {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .form-section {
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid #eee;
+            }
+
+            .form-section h4 {
+                margin-bottom: 1rem;
+                color: #333;
+                font-size: 1.1rem;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .form-group label {
+                font-weight: 500;
+                color: #333;
+            }
+
+            .form-group input,
+            .form-group select {
+                padding: 0.5rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+            }
+
+            .order-items {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .order-item {
+                display: grid;
+                grid-template-columns: 1fr 1fr auto;
+                gap: 1rem;
+                align-items: end;
+                padding: 1rem;
+                background: #f9fafb;
+                border-radius: 4px;
+            }
+
+            .remove-item-btn {
+                background: none;
+                border: none;
+                color: #dc2626;
+                cursor: pointer;
+                padding: 0.5rem;
+            }
+
+            .add-item-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: none;
+                border: 1px dashed #ddd;
+                border-radius: 4px;
+                color: #666;
+                cursor: pointer;
+                margin-top: 1rem;
+            }
+
+            .add-item-btn:hover {
+                background: #f9fafb;
+            }
+
+            .order-summary {
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 4px;
+            }
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+            }
+
+            .summary-row.total {
+                border-top: 1px solid #ddd;
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .form-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .cancel-btn,
+            .submit-btn {
+                padding: 0.75rem 1.5rem;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .cancel-btn {
+                background: none;
+                border: 1px solid #ddd;
+                color: #666;
+            }
+
+            .submit-btn {
+                background: #2563eb;
+                border: none;
+                color: white;
+            }
+
+            .cancel-btn:hover {
+                background: #f5f5f5;
+            }
+
+            .submit-btn:hover {
+                background: #1d4ed8;
+            }
+
+            .form-group textarea {
+                padding: 0.5rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                resize: vertical;
+                min-height: 80px;
+                font-family: inherit;
+            }
+        </style>
+
+        <script>
+            let products = [];
+            const SHIPPING_COST = 5.99;
+
+            async function fetchProducts() {
+                try {
+                    const response = await fetch("http://localhost:3000/products");
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    products = await response.json();
+                    populateProductSelects();
+                } catch (error) {
+                    console.error("Error fetching products:", error);
+                    alert("Failed to load products. Please try again later.");
+                }
+            }
+
+            function populateProductSelects() {
+                const selects = document.querySelectorAll(".product-select");
+                selects.forEach((select) => {
+                    // Clear existing options except the first one
+                    while (select.options.length > 1) {
+                        select.remove(1);
+                    }
+
+                    // Add product options
+                    products.forEach((product) => {
+                        const option = document.createElement("option");
+                        option.value = product.id;
+                        option.textContent = `${product.name} - ${formatPrice(
+                            product.price,
+                        )}`;
+                        select.appendChild(option);
+                    });
+                });
+            }
+
+            function formatPrice(price) {
+                return new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                }).format(price);
+            }
+
+            function calculateOrderSummary() {
+                const items = document.querySelectorAll(".order-item");
+                let subtotal = 0;
+
+                items.forEach((item) => {
+                    const productId = item.querySelector(".product-select").value;
+                    const quantity = parseInt(
+                        item.querySelector('input[name="quantities[]"]').value,
+                    );
+
+                    if (productId) {
+                        const product = products.find((p) => p.id === parseInt(productId));
+                        if (product) {
+                            subtotal += product.price * quantity;
+                        }
+                    }
+                });
+
+                const shipping = subtotal > 0 ? SHIPPING_COST : 0;
+                const total = subtotal + shipping;
+
+                document.getElementById("subtotal").textContent = formatPrice(subtotal);
+                document.getElementById("shipping").textContent = formatPrice(shipping);
+                document.getElementById("total").textContent = formatPrice(total);
+            }
+
+            function addOrderItem() {
+                const orderItems = document.getElementById("orderItems");
+                const newItem = document
+                    .querySelector(".order-item")
+                    .cloneNode(true);
+
+                // Clear values
+                newItem.querySelector(".product-select").value = "";
+                newItem.querySelector('input[name="quantities[]"]').value = "1";
+                newItem.querySelector(".remove-item-btn").style.display = "block";
+
+                // Add remove event listener
+                newItem
+                    .querySelector(".remove-item-btn")
+                    .addEventListener("click", () => {
+                        newItem.remove();
+                        calculateOrderSummary();
+                    });
+
+                // Add change event listeners
+                newItem
+                    .querySelector(".product-select")
+                    .addEventListener("change", calculateOrderSummary);
+                newItem
+                    .querySelector('input[name="quantities[]"]')
+                    .addEventListener("change", calculateOrderSummary);
+
+                orderItems.appendChild(newItem);
+                populateProductSelects();
+            }
+
+            async function createOrder(orderData) {
+                console.log(orderData);
+                try {
+                    const response = await fetch("http://localhost:3000/orders", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(orderData),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    alert("Order created successfully!");
+                    window.location.href = "orders.html"; // Redirect to orders list
+                } catch (error) {
+                    console.error("Error creating order:", error);
+                    alert("Failed to create order. Please try again later.");
+                }
+            }
+
+            // Initialize the page
+            document.addEventListener("DOMContentLoaded", () => {
+                fetchProducts();
+
+                // Add item button click handler
+                document
+                    .getElementById("addItemBtn")
+                    .addEventListener("click", addOrderItem);
+
+                // Add change event listeners to the first order item
+                const firstItem = document.querySelector(".order-item");
+                firstItem
+                    .querySelector(".product-select")
+                    .addEventListener("change", calculateOrderSummary);
+                firstItem
+                    .querySelector('input[name="quantities[]"]')
+                    .addEventListener("change", calculateOrderSummary);
+
+                // Form submission handler
+                document
+                    .getElementById("orderForm")
+                    .addEventListener("submit", async (event) => {
+                        event.preventDefault();
+
+                        const formData = new FormData(event.target);
+                        const orderData = {
+                            customer_name: formData.get("customer_name"),
+                            customer_email: formData.get("customer_email"),
+                            customer_phone: formData.get("customer_phone"),
+                            shipping_address: formData.get("shipping_address"),
+                            order_status: "pending",
+                            total_amount: parseFloat(document.getElementById("total").textContent.replace(/[^0-9.-]+/g, "")),
+                            products: [] // Will contain objects with product_id and quantity
+                        };
+
+                        // Collect products and quantities into a single array of objects
+                        const productSelects = document.querySelectorAll('select[name="products[]"]');
+                        const quantityInputs = document.querySelectorAll('input[name="quantities[]"]');
+
+                        productSelects.forEach((select, index) => {
+                            if (select.value) {
+                                orderData.products.push({
+                                    product_id: parseInt(select.value),
+                                    quantity: parseInt(quantityInputs[index].value)
+                                });
+                            }
+                        });
+
+                        await createOrder(orderData);
+                    });
+            });
+        </script>
+    </body>
+</html>

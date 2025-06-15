@@ -7,7 +7,6 @@ import { Product } from "./product.js";
 /*
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_number VARCHAR(50) UNIQUE NOT NULL,
     customer_name TEXT NOT NULL,
     customer_email TEXT,
     customer_phone TEXT,
@@ -19,7 +18,6 @@ CREATE TABLE IF NOT EXISTS orders (
 
 class Order {
   id;
-  order_number;
   customer_name;
   customer_email;
   customer_phone;
@@ -30,7 +28,6 @@ class Order {
 
   constructor({
     id,
-    order_number,
     customer_name,
     customer_email,
     customer_phone,
@@ -40,7 +37,6 @@ class Order {
     products,
   }) {
     this.id = id;
-    this.order_number = order_number;
     this.customer_name = customer_name;
     this.customer_email = customer_email;
     this.customer_phone = customer_phone;
@@ -52,7 +48,6 @@ class Order {
 }
 
 export class OrderForCreate {
-  order_number;
   customer_name;
   customer_email;
   customer_phone;
@@ -61,7 +56,6 @@ export class OrderForCreate {
   total_amount;
 
   constructor({
-    order_number,
     customer_name,
     customer_email,
     customer_phone,
@@ -69,7 +63,6 @@ export class OrderForCreate {
     order_status,
     total_amount,
   }) {
-    this.order_number = order_number;
     this.customer_name = customer_name;
     this.customer_email = customer_email;
     this.customer_phone = customer_phone;

@@ -115,8 +115,24 @@ export function create(mm, table, obj) {
 export const del = (mm, table, id) =>
   mm.db.prepare(`DELETE FROM ${table} WHERE id = ?`).run(id);
 
-export function update(mm, table, id) {
-  const query = `UPDATE ${table} `;
+export function update(mm, table, id, fields, allowedFields) {
+  const validKeys = Object.keys(fields).filter((key) =>
+    allowedFields.includes(key),
+  );
+
+  if (validKeys.length === 0) {
+    return Promise.reject(new Error("No valid fields provided for update."));
+  }
+
+  const setClause = validKeys.map((key) => `\`${key}\` = ?`).join(", ");
+
+  const values = validKeys.map((key) => fields[key]);
+
+  values.push(id);
+
+  const query = `UPDATE \`${table}\` SET ${setClause} WHERE id = ?`;
+
+  mm.db.prepare(query).run(values);
 }
 
 export function withTransaction(mm, cb) {
